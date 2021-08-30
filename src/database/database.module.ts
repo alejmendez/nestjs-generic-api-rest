@@ -20,7 +20,8 @@ import config from '../config';
           username,
           password,
           database,
-          synchronize: false,
+          entities: [],
+          synchronize: process.env.NODE_ENV === 'prod' ? false : true,
           autoLoadEntities: true,
         } as TypeOrmModuleOptions;
       },
