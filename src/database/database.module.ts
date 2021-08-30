@@ -20,7 +20,7 @@ import config from '../config';
           username,
           password,
           database,
-          entities: [],
+          entities: [__dirname + '/**/*.entity{.ts,.js}'],
           synchronize: process.env.NODE_ENV === 'prod' ? false : true,
           autoLoadEntities: true,
         } as TypeOrmModuleOptions;
