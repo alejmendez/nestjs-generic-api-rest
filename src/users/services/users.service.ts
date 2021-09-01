@@ -1,18 +1,15 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { UpdateResult } from 'typeorm';
 import { hashSync } from 'bcrypt';
 
 import { User } from '../entities/user.entity';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
+import { UsersRepository } from '../repositories/users.repository';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectRepository(User)
-    private usersRepository: Repository<User>,
-  ) {}
+  constructor(private usersRepository: UsersRepository) {}
 
   findAll(): Promise<User[]> {
     return this.usersRepository.find();
@@ -61,8 +58,8 @@ export class UsersService {
     return this.usersRepository.save(user);
   }
 
-  remove(id: string) {
-    return this.usersRepository.delete(id);
+  remove(id: string): Promise<UpdateResult> {
+    return this.usersRepository.softDelete(id);
   }
 
   async verify(verificationToken: string) {

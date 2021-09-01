@@ -25,4 +25,9 @@ export class User extends AppEntity {
   @Exclude()
   @Column({ default: true })
   isActive: boolean;
+
+  constructor(partial?: Partial<User>) {
+    super();
+    Object.assign(this, partial);
+  }
 }

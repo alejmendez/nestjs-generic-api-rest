@@ -17,6 +17,7 @@ import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 
 import { User } from '../entities/user.entity';
+import { UpdateResult } from 'typeorm';
 
 @ApiTags('users')
 @Controller({
@@ -60,7 +61,7 @@ export class UsersController {
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a user by id' })
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: string): Promise<UpdateResult> {
     return this.usersService.remove(id);
   }
 }
