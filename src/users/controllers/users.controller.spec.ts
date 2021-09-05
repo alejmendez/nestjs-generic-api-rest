@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getConnectionToken } from '@nestjs/typeorm';
 
 // Modules
-import { ConfigModule } from '../../config/config.module';
 import { DatabaseModule } from '../../database/database.module';
 import { UsersModule } from '../users.module';
 
@@ -10,7 +9,6 @@ import { UsersController } from './users.controller';
 import { UsersService } from '../services/users.service';
 import { User } from '../entities/user.entity';
 import { UserFactory } from '../factories/user.factory';
-import { UsersRepository } from '../repositories/users.repository';
 
 describe('UsersController', () => {
   let usersController: UsersController;
@@ -19,9 +17,9 @@ describe('UsersController', () => {
 
   beforeEach(async () => {
     module = await Test.createTestingModule({
-      imports: [ConfigModule, DatabaseModule, UsersModule],
-      controllers: [UsersController],
-      providers: [UsersService],
+      imports: [DatabaseModule, UsersModule],
+      controllers: [],
+      providers: [],
     }).compile();
 
     usersService = module.get<UsersService>(UsersService);
