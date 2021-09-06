@@ -1,0 +1,155 @@
+{
+	"info": {
+		"_postman_id": "3dabcf81-96c1-43f3-8a0b-72603a194edc",
+		"name": "nest-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/users?limit=5&page=0&sortBy=updateAt:DESC&search=ale",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "5"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "sortBy",
+									"value": "updateAt:DESC"
+								},
+								{
+									"key": "search",
+									"value": "ale"
+								},
+								{
+									"key": "filter.username",
+									"value": "zackery15@hotmail.com",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get One",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/users/20237018-0ffa-4176-8c4d-c62060b8c951",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"20237018-0ffa-4176-8c4d-c62060b8c951"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.variables.replaceIn('{{$randomFirstName}}')"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"{{$randomUserName}}\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"{{$randomPassword}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"alejmendez333\",\r\n    \"email\": \"alejmendez333@gmail.com\",\r\n    \"password\": \"alejmendez\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users/20237018-0ffa-4176-8c4d-c62060b8c951",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"20237018-0ffa-4176-8c4d-c62060b8c951"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/users/20237018-0ffa-4176-8c4d-c62060b8c951",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"20237018-0ffa-4176-8c4d-c62060b8c951"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
