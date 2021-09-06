@@ -9,6 +9,7 @@ import { UsersController } from './users.controller';
 import { UsersService } from '../services/users.service';
 import { User } from '../entities/user.entity';
 import { UserFactory } from '../factories/user.factory';
+import { Paginated, PaginateQuery } from 'nestjs-paginate';
 
 describe('UsersController', () => {
   let usersController: UsersController;
@@ -38,22 +39,20 @@ describe('UsersController', () => {
   describe('findAll', () => {
     it('should return an array of users', async () => {
       const userFactory = new UserFactory();
-      const resultPromise: Promise<User[]> = new Promise((resolve) => {
-        resolve([
-          userFactory.create(),
-          userFactory.create(),
-          userFactory.create(),
-          userFactory.create(),
-        ]);
-      });
+      const resultPromise: Promise<Paginated<User>> =
+        userFactory.createPagination(5);
 
       const result = await resultPromise;
+
+      const query: PaginateQuery = {
+        path: '',
+      };
 
       jest
         .spyOn(usersService, 'findAll')
         .mockImplementation(() => resultPromise);
 
-      expect(await usersController.findAll()).toBe(result);
+      expect(await usersController.findAll(query)).toBe(result);
     });
   });
 });

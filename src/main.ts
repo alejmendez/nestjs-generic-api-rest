@@ -1,4 +1,4 @@
-import { ValidationPipe, VersioningType } from '@nestjs/common';
+import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
@@ -10,6 +10,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const port = configService.get('APP_PORT');
   const appName = configService.get('APP_NAME');
+  const logger = new Logger(appName);
 
   app.enableCors();
 
@@ -38,6 +39,6 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, document);
 
   await app.listen(port);
-  console.log(`Application is running on: ${await app.getUrl()}`);
+  logger.debug(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();
