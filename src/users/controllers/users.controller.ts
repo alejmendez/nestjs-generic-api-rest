@@ -9,6 +9,7 @@ import {
   HttpCode,
   UseInterceptors,
   ClassSerializerInterceptor,
+  Query,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
@@ -17,6 +18,7 @@ import { CreateUserDto, UpdateUserDto } from '../dto';
 
 import { User } from '../entities/user.entity';
 import { UpdateResult } from 'typeorm';
+import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
 
 @ApiTags('users')
 @Controller({
@@ -29,8 +31,8 @@ export class UsersController {
   @Get()
   @ApiOperation({ summary: 'List of users' })
   @UseInterceptors(ClassSerializerInterceptor)
-  findAll(): Promise<User[]> {
-    return this.usersService.findAll();
+  public findAll(@Paginate() query: PaginateQuery): Promise<Paginated<User>> {
+    return this.usersService.findAll(query);
   }
 
   @Get(':id')

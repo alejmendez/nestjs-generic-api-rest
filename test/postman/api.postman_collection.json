@@ -14,12 +14,35 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/users",
+							"raw": "{{url}}/users?limit=5&page=0&sortBy=updateAt:DESC&search=ale",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"users"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "5"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "sortBy",
+									"value": "updateAt:DESC"
+								},
+								{
+									"key": "search",
+									"value": "ale"
+								},
+								{
+									"key": "filter.username",
+									"value": "zackery15@hotmail.com",
+									"disabled": true
+								}
 							]
 						}
 					},

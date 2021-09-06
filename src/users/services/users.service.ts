@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
 import { UpdateResult } from 'typeorm';
 import { hashSync } from 'bcrypt';
 
@@ -10,8 +11,13 @@ import { UsersRepository } from '../repositories/users.repository';
 export class UsersService {
   constructor(private usersRepository: UsersRepository) {}
 
-  findAll(): Promise<User[]> {
-    return this.usersRepository.find();
+  public findAll(query: PaginateQuery): Promise<Paginated<User>> {
+    return paginate(query, this.usersRepository, {
+      sortableColumns: ['id', 'username', 'email'],
+      searchableColumns: ['username', 'email'],
+      defaultSortBy: [['username', 'DESC']],
+      filterableColumns: {},
+    });
   }
 
   async findOne(id: string): Promise<User> {
