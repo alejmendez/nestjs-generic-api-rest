@@ -9,7 +9,6 @@ import {
   HttpCode,
   UseInterceptors,
   ClassSerializerInterceptor,
-  Query,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
