@@ -1,15 +1,19 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
-import { UpdateResult } from 'typeorm';
-import { hashSync } from 'bcrypt';
+import { Repository, UpdateResult } from 'typeorm';
 
 import { User } from '../entities/user.entity';
 import { CreateUserDto, UpdateUserDto } from '../dto';
-import { UsersRepository } from '../repositories/users.repository';
+import { generateRandomString, hashPassword } from '../../../common/utils';
 
 @Injectable()
 export class UsersService {
-  constructor(private usersRepository: UsersRepository) {}
+  readonly numberOfCharactersUsedToGenerateUserValidationToken = 64;
+
+  constructor(
+    @InjectRepository(User) private usersRepository: Repository<User>,
+  ) {}
 
   public findAll(query: PaginateQuery): Promise<Paginated<User>> {
     return paginate(query, this.usersRepository, {
@@ -21,15 +25,11 @@ export class UsersService {
   }
 
   async findOne(id: string): Promise<User> {
-    try {
-      return await this.usersRepository.findOneOrFail(id);
-    } catch (error) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    }
+    return await this.usersRepository.findOneOrFail(id);
   }
 
   async findOneByEmail(email: string): Promise<User> {
-    return await this.usersRepository.findOne({
+    return await this.usersRepository.findOneOrFail({
       email,
     });
   }
@@ -40,8 +40,9 @@ export class UsersService {
   }
 
   async create(data: CreateUserDto): Promise<User> {
+    data.username = data.username.toLowerCase();
+    data.email = data.email.toLowerCase();
     const user = this.usersRepository.create(data);
-    user.email = user.email.toLowerCase();
 
     const existUserWithEmail = await this.existUserWithEmail(user.email);
     if (existUserWithEmail) {
@@ -51,9 +52,10 @@ export class UsersService {
       );
     }
 
-    user.username = user.username.toLowerCase();
-    user.password = await hashSync(user.password, 15);
-    user.verificationToken = this.generateRandomString(64);
+    user.password = await hashPassword(user.password);
+    user.verificationToken = generateRandomString(
+      this.numberOfCharactersUsedToGenerateUserValidationToken,
+    );
     return this.usersRepository.save(user);
   }
 
@@ -71,16 +73,5 @@ export class UsersService {
     const query = { verificationToken };
     const data = { isActive: true, email_verified_at: new Date() };
     return await this.usersRepository.update(query, data);
-  }
-
-  generateRandomString(length = 10): string {
-    let result = '';
-    const characters =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const charactersLength = characters.length;
-    for (let i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
   }
 }

@@ -1,6 +1,6 @@
 import { Entity, Column } from 'typeorm';
 import { Exclude } from 'class-transformer';
-import { AppEntity } from '../../common/entities/generic.entity';
+import { AppEntity } from '../../../common/entities/generic.entity';
 
 @Entity('users')
 export class User extends AppEntity {
@@ -14,7 +14,6 @@ export class User extends AppEntity {
   @Column('varchar', { length: 64 })
   password: string;
 
-  @Exclude()
   @Column({ name: 'email_verified_at', nullable: true })
   emailVerifiedAt: Date;
 
@@ -22,7 +21,6 @@ export class User extends AppEntity {
   @Column('varchar', { name: 'verification_token', length: 64 })
   verificationToken: string;
 
-  @Exclude()
   @Column({ default: true })
   isActive: boolean;
 
