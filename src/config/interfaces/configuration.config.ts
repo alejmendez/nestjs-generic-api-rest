@@ -1,11 +1,7 @@
 import { DatabaseConfig } from './database.config';
-import { PaginationConfig } from './pagination.config';
+import { AppConfig } from './app.config';
 
 export interface ConfigurationConfig {
   database: DatabaseConfig;
-  debug: boolean;
-  appPort: number;
-  appUrl: string;
-  jwtSecret: string;
-  pagination: PaginationConfig;
+  app: AppConfig;
 }

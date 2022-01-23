@@ -7,11 +7,13 @@ export default () => ({
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
   },
-  debug: process.env.APP_DEBUG,
-  appPort: process.env.APP_PORT,
-  appUrl: process.env.APP_URL,
-  jwtSecret: process.env.JWT_SECRET,
-  pagination: {
-    limit: process.env.PAGINATION_LIMIT_DEFAULT,
+  app: {
+    debug: process.env.APP_DEBUG,
+    appPort: process.env.APP_PORT,
+    appUrl: process.env.APP_URL,
+    jwtSecret: process.env.JWT_SECRET,
+    pagination: {
+      limit: process.env.PAGINATION_LIMIT_DEFAULT,
+    },
   },
 });

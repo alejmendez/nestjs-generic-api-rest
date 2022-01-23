@@ -66,6 +66,28 @@ describe('UsersController', () => {
     expect(mockUsersService.findAll).toHaveBeenCalledWith(query);
   });
 
+  it('should get a user', async () => {
+    const id = uuid();
+
+    expect(mockUsersService.findOne).not.toHaveBeenCalled();
+
+    const result = await controller.findOne(id);
+    const expected = {
+      id,
+      username: expect.any(String),
+      email: expect.any(String),
+      password: expect.any(String),
+      emailVerifiedAt: expect.any(Date),
+      verificationToken: expect.any(String),
+      isActive: expect.any(Boolean),
+    };
+
+    expect(result).toEqual(expected);
+
+    expect(mockUsersService.findOne).toHaveBeenCalled();
+    expect(mockUsersService.findOne).toHaveBeenCalledWith(id);
+  });
+
   it('should create a user', async () => {
     const dto = generateCreateUserDto();
 
@@ -97,24 +119,19 @@ describe('UsersController', () => {
     expect(mockUsersService.update).toHaveBeenCalledWith(id, dto);
   });
 
-  /*
-  describe('findAll', () => {
-    it('should return an array of users', async () => {
-      const resultPromise: Promise<Paginated<User>> =
-        userFactory.createPagination(5);
+  it('should remove a user', async () => {
+    const dto = generateCreateUserDto();
+    const id = uuid();
 
-      const result = await resultPromise;
+    expect(mockUsersService.remove).not.toHaveBeenCalled();
 
-      const query: PaginateQuery = {
-        path: '',
-      };
-
-      jest
-        .spyOn(usersService, 'findAll')
-        .mockImplementation(() => resultPromise);
-
-      expect(await controller.findAll(query)).toBe(result);
+    const result = await controller.remove(id);
+    expect(result).toEqual({
+      id,
+      ...dto,
     });
+
+    expect(mockUsersService.remove).toHaveBeenCalled();
+    expect(mockUsersService.remove).toHaveBeenCalledWith(id);
   });
-  */
 });

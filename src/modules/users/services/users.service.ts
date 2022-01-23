@@ -29,14 +29,16 @@ export class UsersService {
   }
 
   async findOneByEmail(email: string): Promise<User> {
-    return await this.usersRepository.findOneOrFail({
-      email,
-    });
+    const user = await this.usersRepository.findOne({ email });
+    if (user) {
+      return user;
+    }
+    return null;
   }
 
   async existUserWithEmail(email: string): Promise<boolean> {
     const user = await this.findOneByEmail(email);
-    return user !== undefined;
+    return user !== null;
   }
 
   async create(data: CreateUserDto): Promise<User> {

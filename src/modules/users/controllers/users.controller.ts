@@ -9,7 +9,9 @@ import {
   HttpCode,
   UseInterceptors,
   ClassSerializerInterceptor,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 
 import { UsersService } from '../services/users.service';
 import { CreateUserDto, UpdateUserDto } from '../dto';
@@ -18,6 +20,7 @@ import { User } from '../entities/user.entity';
 import { UpdateResult } from 'typeorm';
 import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller({
   path: 'users',
   version: '1',
@@ -26,13 +29,11 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  @UseInterceptors(ClassSerializerInterceptor)
   public findAll(@Paginate() query: PaginateQuery): Promise<Paginated<User>> {
     return this.usersService.findAll(query);
   }
 
   @Get(':id')
-  @UseInterceptors(ClassSerializerInterceptor)
   findOne(@Param('id') id: string): Promise<User> {
     return this.usersService.findOne(id);
   }
