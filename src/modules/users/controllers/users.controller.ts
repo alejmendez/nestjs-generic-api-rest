@@ -12,15 +12,20 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
+import { UpdateResult } from 'typeorm';
 
 import { UsersService } from '../services/users.service';
 import { CreateUserDto, UpdateUserDto } from '../dto';
 
 import { User } from '../entities/user.entity';
-import { UpdateResult } from 'typeorm';
-import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../../auth/guards/roles.guard';
+import { Roles } from 'src/modules/auth/models/roles.model';
+import { AllowedRoles } from 'src/modules/auth/decorators/roles.decorator';
 
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(JwtAuthGuard, RolesGuard)
+@AllowedRoles(Roles.ADMIN)
 @Controller({
   path: 'users',
   version: '1',

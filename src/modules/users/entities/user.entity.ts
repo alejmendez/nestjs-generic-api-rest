@@ -24,6 +24,9 @@ export class User extends AppEntity {
   @Column({ default: true })
   isActive: boolean;
 
+  @Column({ type: 'varchar', length: 100 })
+  role: string;
+
   constructor(partial?: Partial<User>) {
     super();
     Object.assign(this, partial);
