@@ -1,18 +1,11 @@
 import { Test } from '@nestjs/testing';
-import * as faker from 'faker';
 
 import { UsersController } from '../controllers/users.controller';
 import { UsersService } from '../services/users.service';
-import { CreateUserDto } from '../dto';
 import { uuid } from '../../../common/utils';
 import { mockUsersService } from './mocks';
 import { PaginateQuery } from 'nestjs-paginate';
-
-const generateCreateUserDto = (): CreateUserDto => ({
-  username: faker.internet.userName(),
-  email: faker.internet.email(),
-  password: faker.internet.password(),
-});
+import { createUserDto } from './mocks/user.dto.mock';
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -79,6 +72,7 @@ describe('UsersController', () => {
       password: expect.any(String),
       emailVerifiedAt: expect.any(Date),
       verificationToken: expect.any(String),
+      role: expect.any(String),
       isActive: expect.any(Boolean),
     };
 
@@ -89,7 +83,7 @@ describe('UsersController', () => {
   });
 
   it('should create a user', async () => {
-    const dto = generateCreateUserDto();
+    const dto = createUserDto();
 
     expect(mockUsersService.create).not.toHaveBeenCalled();
     const result = await controller.create(dto);
@@ -104,7 +98,7 @@ describe('UsersController', () => {
   });
 
   it('should update a user', async () => {
-    const dto = generateCreateUserDto();
+    const dto = createUserDto();
     const id = uuid();
 
     expect(mockUsersService.update).not.toHaveBeenCalled();
@@ -120,7 +114,6 @@ describe('UsersController', () => {
   });
 
   it('should remove a user', async () => {
-    const dto = generateCreateUserDto();
     const id = uuid();
 
     expect(mockUsersService.remove).not.toHaveBeenCalled();
@@ -128,7 +121,13 @@ describe('UsersController', () => {
     const result = await controller.remove(id);
     expect(result).toEqual({
       id,
-      ...dto,
+      username: expect.any(String),
+      email: expect.any(String),
+      password: expect.any(String),
+      emailVerifiedAt: expect.any(Date),
+      verificationToken: expect.any(String),
+      role: expect.any(String),
+      isActive: expect.any(Boolean),
     });
 
     expect(mockUsersService.remove).toHaveBeenCalled();

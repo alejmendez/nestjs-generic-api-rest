@@ -1,12 +1,14 @@
 import { Entity, Column } from 'typeorm';
-import { Exclude } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 import { AppEntity } from '../../../common/entities/generic.entity';
 
 @Entity('users')
 export class User extends AppEntity {
+  @Expose()
   @Column('varchar', { length: 30 })
   username: string;
 
+  @Expose()
   @Column('varchar', { length: 100, unique: true })
   email: string;
 
@@ -14,6 +16,7 @@ export class User extends AppEntity {
   @Column('varchar', { length: 64 })
   password: string;
 
+  @Expose()
   @Column({ name: 'email_verified_at', nullable: true })
   emailVerifiedAt: Date;
 
@@ -21,9 +24,11 @@ export class User extends AppEntity {
   @Column('varchar', { name: 'verification_token', length: 64 })
   verificationToken: string;
 
+  @Expose()
   @Column({ default: true })
   isActive: boolean;
 
+  @Expose()
   @Column({ type: 'varchar', length: 100 })
   role: string;
 

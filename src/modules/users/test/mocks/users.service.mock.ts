@@ -26,7 +26,9 @@ const mockUsersService = {
       ...dto,
     };
   }),
-  remove: jest.fn(),
+  remove: jest.fn((id: string): Promise<User> => {
+    return userFactory.create({ id });
+  }),
   verify: jest.fn(),
   generateRandomString: jest.fn(),
 };

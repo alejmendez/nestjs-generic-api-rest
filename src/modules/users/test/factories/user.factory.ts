@@ -1,8 +1,9 @@
-import * as faker from 'faker';
+import { faker } from '@faker-js/faker';
 import { Paginated } from 'nestjs-paginate';
 
 import { User } from '../../entities/user.entity';
 import { generateRandomString, hashPassword } from '../../../../common/utils';
+import { Roles } from '../../../../modules/auth/models/roles.model';
 
 export class UserFactory {
   async createPagination(count: number): Promise<Paginated<User>> {
@@ -42,6 +43,9 @@ export class UserFactory {
     user.emailVerifiedAt = new Date();
     user.isActive = faker.datatype.boolean();
     user.verificationToken = generateRandomString(20);
+    user.role = faker.helpers.randomize(
+      Object.keys(Roles).map((key) => Roles[key]),
+    );
 
     return user;
   }

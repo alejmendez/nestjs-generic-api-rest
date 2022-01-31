@@ -10,7 +10,6 @@ export class AppEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Exclude()
   @CreateDateColumn({
     name: 'create_at',
   })

@@ -10,19 +10,18 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
   UseGuards,
+  SerializeOptions,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
-import { UpdateResult } from 'typeorm';
 
 import { UsersService } from '../services/users.service';
 import { CreateUserDto, UpdateUserDto } from '../dto';
 
-import { User } from '../entities/user.entity';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../auth/guards/roles.guard';
-import { Roles } from 'src/modules/auth/models/roles.model';
-import { AllowedRoles } from 'src/modules/auth/decorators/roles.decorator';
+import { Roles } from '../../../modules/auth/models/roles.model';
+import { AllowedRoles } from '../../../modules/auth/decorators/roles.decorator';
+import { User } from '../entities/user.entity';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
 @AllowedRoles(Roles.ADMIN)
@@ -30,6 +29,7 @@ import { AllowedRoles } from 'src/modules/auth/decorators/roles.decorator';
   path: 'users',
   version: '1',
 })
+@UseInterceptors(ClassSerializerInterceptor)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -39,20 +39,18 @@ export class UsersController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<User> {
+  public findOne(@Param('id') id: string): Promise<User> {
     return this.usersService.findOne(id);
   }
 
   @Post()
   @HttpCode(201)
-  @UseInterceptors(ClassSerializerInterceptor)
-  create(@Body() payload: CreateUserDto): Promise<User> {
+  public create(@Body() payload: CreateUserDto): Promise<User> {
     return this.usersService.create(payload);
   }
 
   @Put(':id')
-  @UseInterceptors(ClassSerializerInterceptor)
-  update(
+  public update(
     @Param('id') id: string,
     @Body() payload: UpdateUserDto,
   ): Promise<User> {
@@ -60,7 +58,7 @@ export class UsersController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): Promise<UpdateResult> {
+  public remove(@Param('id') id: string): Promise<User> {
     return this.usersService.remove(id);
   }
 }

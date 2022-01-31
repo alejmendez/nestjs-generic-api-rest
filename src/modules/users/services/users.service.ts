@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
-import { Repository, UpdateResult } from 'typeorm';
+import { Repository } from 'typeorm';
 
 import { User } from '../entities/user.entity';
 import { CreateUserDto, UpdateUserDto } from '../dto';
@@ -67,8 +67,17 @@ export class UsersService {
     return this.usersRepository.save(user);
   }
 
-  remove(id: string): Promise<UpdateResult> {
-    return this.usersRepository.softDelete(id);
+  async remove(id: string): Promise<User> {
+    try {
+      const user = await this.findOne(id);
+      await this.usersRepository.softDelete(id);
+      return user;
+    } catch (error) {
+      throw new HttpException(
+        'Error when trying to delete user',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   async verify(verificationToken: string) {
