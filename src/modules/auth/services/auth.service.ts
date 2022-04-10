@@ -20,9 +20,7 @@ export class AuthService {
       if (isMatch) {
         return user;
       }
-    } catch (error) {
-      return null;
-    }
+    } catch (error) {}
     return null;
   }
 

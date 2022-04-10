@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
+import { paginate, PaginateQuery } from 'nestjs-paginate';
 import { Repository } from 'typeorm';
 
 import { User } from '../entities/user.entity';
@@ -15,7 +15,7 @@ export class UsersService {
     @InjectRepository(User) private usersRepository: Repository<User>,
   ) {}
 
-  public findAll(query: PaginateQuery): Promise<Paginated<User>> {
+  public findAll(query: PaginateQuery) {
     return paginate(query, this.usersRepository, {
       sortableColumns: ['id', 'username', 'email'],
       searchableColumns: ['username', 'email'],
@@ -24,11 +24,11 @@ export class UsersService {
     });
   }
 
-  async findOne(id: string): Promise<User> {
+  public async findOne(id: string) {
     return await this.usersRepository.findOneOrFail(id);
   }
 
-  async findOneByEmail(email: string): Promise<User> {
+  public async findOneByEmail(email: string) {
     const user = await this.usersRepository.findOne({ email });
     if (user) {
       return user;
@@ -36,16 +36,15 @@ export class UsersService {
     return null;
   }
 
-  async existUserWithEmail(email: string): Promise<boolean> {
+  public async existUserWithEmail(email: string) {
     const user = await this.findOneByEmail(email);
     return user !== null;
   }
 
-  async create(data: CreateUserDto): Promise<User> {
+  public async create(data: CreateUserDto) {
     data.username = data.username.toLowerCase();
     data.email = data.email.toLowerCase();
-    const user = this.usersRepository.create(data);
-
+    const user = await this.usersRepository.create(data);
     const existUserWithEmail = await this.existUserWithEmail(user.email);
     if (existUserWithEmail) {
       throw new HttpException(
@@ -61,13 +60,13 @@ export class UsersService {
     return this.usersRepository.save(user);
   }
 
-  async update(id: string, data: UpdateUserDto): Promise<User> {
+  public async update(id: string, data: UpdateUserDto) {
     const user = await this.usersRepository.findOne(id);
     this.usersRepository.merge(user, data);
     return this.usersRepository.save(user);
   }
 
-  async remove(id: string): Promise<User> {
+  public async remove(id: string) {
     try {
       const user = await this.findOne(id);
       await this.usersRepository.softDelete(id);
@@ -80,7 +79,7 @@ export class UsersService {
     }
   }
 
-  async verify(verificationToken: string) {
+  public async verify(verificationToken: string) {
     const query = { verificationToken };
     const data = { isActive: true, email_verified_at: new Date() };
     return await this.usersRepository.update(query, data);

@@ -1,7 +1,6 @@
 import { Global, Module } from '@nestjs/common';
 import { ConfigModule as Config } from '@nestjs/config';
 
-// Config
 import { enviroments } from '../enviroments';
 import configuration from './configuration';
 import validationSchema from './schema';

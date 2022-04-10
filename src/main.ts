@@ -43,7 +43,6 @@ const bootstrap = async () => {
       },
     }),
   );
-  // app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
   await app.listen(port);
   logger.debug(`Application is running on: ${await app.getUrl()}`);
