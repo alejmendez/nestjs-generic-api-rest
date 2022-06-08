@@ -16,7 +16,7 @@ export class User extends AppEntity {
   @Column('varchar', { length: 64 })
   password: string;
 
-  @Expose()
+  @Exclude()
   @Column({ name: 'email_verified_at', nullable: true })
   emailVerifiedAt: Date;
 
@@ -24,7 +24,7 @@ export class User extends AppEntity {
   @Column('varchar', { name: 'verification_token', length: 64 })
   verificationToken: string;
 
-  @Expose()
+  @Exclude()
   @Column({ default: true })
   isActive: boolean;
 

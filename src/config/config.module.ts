@@ -1,7 +1,7 @@
 import { Global, Module } from '@nestjs/common';
 import { ConfigModule as Config } from '@nestjs/config';
 
-import { enviroments } from '../enviroments';
+import { environments } from '../environments';
 import configuration from './configuration';
 import validationSchema from './schema';
 
@@ -9,7 +9,7 @@ import validationSchema from './schema';
 @Module({
   imports: [
     Config.forRoot({
-      envFilePath: enviroments[process.env.NODE_ENV] || '.env',
+      envFilePath: environments[process.env.NODE_ENV] || '.env',
       load: [configuration],
       isGlobal: true,
       validationSchema,

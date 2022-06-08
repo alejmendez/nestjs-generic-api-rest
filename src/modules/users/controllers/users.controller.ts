@@ -10,7 +10,6 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
   UseGuards,
-  SerializeOptions,
 } from '@nestjs/common';
 import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
 

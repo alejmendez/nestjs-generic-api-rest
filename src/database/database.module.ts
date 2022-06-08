@@ -16,7 +16,6 @@ import { DatabaseConfig } from '../config/interfaces/database.config';
 
         const { connection, host, port, username, database, password } =
           databaseConfig;
-
         return {
           type: connection,
           host,

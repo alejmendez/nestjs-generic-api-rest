@@ -5,6 +5,8 @@ import { hashCompare } from '../../../common/utils';
 import { UsersService } from '../../users/services/users.service';
 import { User } from '../../users/entities/user.entity';
 import { PayloadToken } from '../models/token.model';
+import { RegisterDto } from '../dto/register.dto';
+import { Roles } from '../models/roles.model';
 
 @Injectable()
 export class AuthService {
@@ -35,5 +37,12 @@ export class AuthService {
       token_type: 'Bearer',
       user,
     };
+  }
+
+  public async register(data: RegisterDto) {
+    return await this.usersService.create({
+      ...data,
+      role: Roles.CUSTOMER,
+    });
   }
 }
