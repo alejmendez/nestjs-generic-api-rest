@@ -1,5 +1,5 @@
 import { Paginated, PaginateQuery } from 'nestjs-paginate';
-import { UserFactory } from '../factories/user.factory';
+import { UserFactory } from '../../../../database/factories/user.factory';
 import { User } from '../../entities/user.entity';
 import { uuid } from '../../../../common/utils';
 

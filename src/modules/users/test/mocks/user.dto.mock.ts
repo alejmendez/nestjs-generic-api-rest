@@ -1,13 +1,13 @@
-import { faker } from '@faker-js/faker';
+import * as Faker from 'faker';
 import { Roles } from '../../../../modules/auth/models/roles.model';
 import { CreateUserDto } from '../../dto';
 
 const createUserDto = (): CreateUserDto => {
   return {
-    username: faker.internet.userName(),
-    email: faker.internet.email(),
-    password: faker.internet.password(),
-    role: faker.random.arrayElement(
+    username: Faker.internet.userName(),
+    email: Faker.internet.email(),
+    password: Faker.internet.password(),
+    role: Faker.random.arrayElement(
       Object.keys(Roles).map((key) => Roles[key]),
     ),
   };

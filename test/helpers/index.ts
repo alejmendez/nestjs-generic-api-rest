@@ -8,7 +8,9 @@ import {
   put,
   patch,
   del,
+  setHeaders,
 } from './request';
+import { generateJwt } from './db';
 
 export {
   initServer,
@@ -20,4 +22,6 @@ export {
   put,
   patch,
   del,
+  setHeaders,
+  generateJwt,
 };

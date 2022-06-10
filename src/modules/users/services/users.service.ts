@@ -25,11 +25,11 @@ export class UsersService {
   }
 
   public async findOne(id: string) {
-    return await this.usersRepository.findOneOrFail(id);
+    return await this.usersRepository.findOneOrFail({ where: { id } });
   }
 
   public async findOneByEmail(email: string) {
-    const user = await this.usersRepository.findOne({ email });
+    const user = await this.usersRepository.findOne({ where: { email } });
     if (user) {
       return user;
     }
@@ -61,7 +61,7 @@ export class UsersService {
   }
 
   public async update(id: string, data: UpdateUserDto) {
-    const user = await this.usersRepository.findOne(id);
+    const user = await this.usersRepository.findOne({ where: { id } });
     this.usersRepository.merge(user, data);
     return this.usersRepository.save(user);
   }

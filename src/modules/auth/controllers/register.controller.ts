@@ -1,4 +1,4 @@
-import { Body, Controller, Get } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 
 import { RegisterDto } from '../dto/register.dto';
 import { AuthService } from '../services/auth.service';
@@ -7,10 +7,10 @@ import { AuthService } from '../services/auth.service';
   path: 'register',
   version: '1',
 })
-export class CurrentUserController {
+export class RegisterController {
   constructor(private readonly authService: AuthService) {}
 
-  @Get('/')
+  @Post('/')
   currentUser(@Body() payload: RegisterDto) {
     return this.authService.register(payload);
   }
