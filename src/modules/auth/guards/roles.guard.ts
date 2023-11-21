@@ -73,13 +73,13 @@ export class RolesGuard implements CanActivate {
     return true;
   }
 
-  validateByHandlerAndClass(user) {
+  validateByHandlerAndClass(user: PayloadToken) {
     this.isValid(user, this.rolesAllowedInTheClass);
     this.isValid(user, this.rolesAllowedInTheHandler);
     return true;
   }
 
-  isValid(user, rolesAllowed) {
+  isValid(user: PayloadToken, rolesAllowed: Roles[]) {
     const isValid = this.userIsAllowed(user, rolesAllowed);
     if (!isValid) {
       throw new UnauthorizedException('your role is wrong');
@@ -87,7 +87,7 @@ export class RolesGuard implements CanActivate {
     return true;
   }
 
-  userIsAllowed(user, rolesAllowed) {
+  userIsAllowed(user: PayloadToken, rolesAllowed: Roles[]) {
     return rolesAllowed.some((role) => role === user.role);
   }
 }

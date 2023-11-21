@@ -19,7 +19,7 @@ export class UserFactory {
         sortBy: [],
         searchBy: [],
         search: '',
-        select: []
+        select: [],
       },
       links: {
         current: '',

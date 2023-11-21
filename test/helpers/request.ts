@@ -4,7 +4,7 @@ import { initServer } from './server';
 
 let appInstance: INestApplication;
 let requestInstance: supertest.SuperTest<supertest.Test>;
-let headersByDefault: { [key: string]: string; } = {};
+let headersByDefault: { [key: string]: string } = {};
 
 const setHeadersToRequest = (request: supertest.Test): supertest.Test => {
   Object.entries(headersByDefault).map(([index, value]) => {
@@ -26,7 +26,7 @@ export const closeServer = async () => {
   await appInstance.close();
 };
 
-export const setHeaders = (headers: { [key: string]: string; }) => {
+export const setHeaders = (headers: { [key: string]: string }) => {
   headersByDefault = headers;
 };
 
@@ -34,15 +34,27 @@ export const get = (url: string, cb?: supertest.CallbackHandler) => {
   return setHeadersToRequest(requestInstance.get(url, cb));
 };
 
-export const post = (url: string, data?: any, cb?: supertest.CallbackHandler) => {
+export const post = (
+  url: string,
+  data?: any,
+  cb?: supertest.CallbackHandler,
+) => {
   return setHeadersToRequest(requestInstance.post(url, cb).send(data));
 };
 
-export const put = (url: string, data?: any, cb?: supertest.CallbackHandler) => {
+export const put = (
+  url: string,
+  data?: any,
+  cb?: supertest.CallbackHandler,
+) => {
   return setHeadersToRequest(requestInstance.put(url, cb).send(data));
 };
 
-export const patch = (url: string, data?: any, cb?: supertest.CallbackHandler) => {
+export const patch = (
+  url: string,
+  data?: any,
+  cb?: supertest.CallbackHandler,
+) => {
   return setHeadersToRequest(requestInstance.patch(url, cb).send(data));
 };
 
