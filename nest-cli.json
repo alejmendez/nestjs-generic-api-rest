@@ -2,9 +2,12 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
   "compilerOptions": {
-    "plugins": [],
     "assets": [
-      { "include": "i18n/**/*", "watchAssets": true }
+      {
+        "include": "i18n/**/*",
+        "watchAssets": true,
+        "outDir": "dist"
+      }
     ]
   }
 }

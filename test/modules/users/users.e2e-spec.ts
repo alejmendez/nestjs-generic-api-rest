@@ -8,17 +8,18 @@ import {
   put,
   del,
   generateJwt,
-  setHeaders,
 } from '../../helpers';
 
-describe('Users Module (e2e)', () => {
+describe('Users Module /api/users (e2e)', () => {
   let admin: User;
+  let jwt = '';
   beforeAll(async () => {
     await startServer();
 
     const userFactory = new UserFactory();
     await userFactory.createList(6);
     admin = await userFactory.createAdmin();
+    jwt = generateJwt(admin);
   });
 
   afterAll(async () => {
@@ -26,14 +27,9 @@ describe('Users Module (e2e)', () => {
   });
 
   describe('with auth', () => {
-    const jwt = generateJwt(admin);
-    setHeaders({
-      Accept: 'application/json',
-      Authorization: `Bearer ${jwt}`,
-    });
-    it('/api/v1/users (GET) List users', () => {
-      const res = get('/api/v1/users');
-      res
+    it('List users', () => {
+      const res = get('/api/users').set('Authorization', `Bearer ${jwt}`);
+      return res
         .expect(200)
         .expect({
           status: 'ok',
@@ -43,36 +39,52 @@ describe('Users Module (e2e)', () => {
         });
     });
 
-    it('/api/v1/users/:id (GET) Get an users', () => {
-      get('/api/v1/users').expect(200).expect({
-        status: 'ok',
-      });
+    it('/api/users/:id (GET) Get an users', () => {
+      return get('/api/users')
+        .set('Authorization', `Bearer ${jwt}`)
+        .expect(200)
+        .expect({
+          status: 'ok',
+        });
     });
 
-    it('/api/v1/users (POST) Create an user', () => {
-      post('/api/v1/users').expect(201).expect({
-        status: 'ok',
-      });
+    it('/api/users (POST) Create an user', () => {
+      return post('/api/users')
+        .send({
+          username: 'alejmendez',
+          email: 'alejmendez@gmail.com',
+          password: 'qwer1234',
+          role: 'admin',
+        })
+        .set('Authorization', `Bearer ${jwt}`)
+        .expect(201)
+        .expect({
+          status: 'ok',
+        });
     });
 
-    it('/api/v1/users/:id (PUT) Update an user', () => {
-      put('/api/v1/users').expect(200).expect({
-        status: 'ok',
-      });
+    it('/api/users/:id (PUT) Update an user', () => {
+      return put('/api/users')
+        .set('Authorization', `Bearer ${jwt}`)
+        .expect(200)
+        .expect({
+          status: 'ok',
+        });
     });
 
-    it('/api/v1/users/:id (DELETE) Delete an user', () => {
-      del('/api/v1/users').expect(200).expect({
-        status: 'ok',
-      });
+    it('/api/users/:id (DELETE) Delete an user', () => {
+      return del('/api/users')
+        .set('Authorization', `Bearer ${jwt}`)
+        .expect(200)
+        .expect({
+          status: 'ok',
+        });
     });
   });
 
   describe('without auth', () => {
-    it('/api/v1/users (GET) List users', () => {
-      get('/api/v1/users').expect(200).expect({
-        status: 'ok',
-      });
+    it('/api/users (GET) List users', () => {
+      return get('/api/users').expect(401);
     });
   });
 });

@@ -1,14 +1,16 @@
-import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 
-import helmet from 'helmet';
+import helmet from '@fastify/helmet';
 
 import { AppModule } from './app.module';
+import { HttpExceptionFilter } from './common/HttpExceptionFilter';
 
 const bootstrap = async () => {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -21,13 +23,7 @@ const bootstrap = async () => {
   const logger = new Logger(appName);
 
   app.enableCors();
-  app.use(helmet());
-
   app.setGlobalPrefix('api');
-
-  app.enableVersioning({
-    type: VersioningType.URI,
-  });
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -38,6 +34,10 @@ const bootstrap = async () => {
       },
     }),
   );
+
+  app.useGlobalFilters(new HttpExceptionFilter());
+
+  await app.register(helmet);
 
   await app.listen(port);
   logger.debug(`Application is running on: ${await app.getUrl()}`);

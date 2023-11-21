@@ -1,52 +1,51 @@
 import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
-import { SuperTest, Test } from 'supertest';
+import * as supertest from 'supertest';
 import { initServer } from './server';
 
 let appInstance: INestApplication;
-let requestInstance: SuperTest<Test>;
-let headersByDefault: any = {};
+let requestInstance: supertest.SuperTest<supertest.Test>;
+let headersByDefault: { [key: string]: string; } = {};
 
-const setHeadersToRequest = (request) => {
+const setHeadersToRequest = (request: supertest.Test): supertest.Test => {
   Object.entries(headersByDefault).map(([index, value]) => {
     request.set(index, value);
   });
   return request;
 };
 
-export const startServer = async () => {
+export const startServer = async (): Promise<void> => {
   setServer(await initServer());
 };
 
-export const setServer = async (app: INestApplication) => {
+export const setServer = async (app: INestApplication): Promise<void> => {
   appInstance = app;
-  requestInstance = request(app.getHttpServer());
+  requestInstance = supertest(app.getHttpServer());
 };
 
 export const closeServer = async () => {
   await appInstance.close();
 };
 
-export const setHeaders = (headers: any) => {
+export const setHeaders = (headers: { [key: string]: string; }) => {
   headersByDefault = headers;
 };
 
-export const get = (url: string, callback?: request.CallbackHandler) => {
-  return setHeadersToRequest(requestInstance.get(url, callback));
+export const get = (url: string, cb?: supertest.CallbackHandler) => {
+  return setHeadersToRequest(requestInstance.get(url, cb));
 };
 
-export const post = (url: string, callback?: request.CallbackHandler) => {
-  return setHeadersToRequest(requestInstance.post(url, callback));
+export const post = (url: string, data?: any, cb?: supertest.CallbackHandler) => {
+  return setHeadersToRequest(requestInstance.post(url, cb).send(data));
 };
 
-export const put = (url: string, callback?: request.CallbackHandler) => {
-  return setHeadersToRequest(requestInstance.put(url, callback));
+export const put = (url: string, data?: any, cb?: supertest.CallbackHandler) => {
+  return setHeadersToRequest(requestInstance.put(url, cb).send(data));
 };
 
-export const patch = (url: string, callback?: request.CallbackHandler) => {
-  return setHeadersToRequest(requestInstance.patch(url, callback));
+export const patch = (url: string, data?: any, cb?: supertest.CallbackHandler) => {
+  return setHeadersToRequest(requestInstance.patch(url, cb).send(data));
 };
 
-export const del = (url: string, callback?: request.CallbackHandler) => {
-  return setHeadersToRequest(requestInstance.del(url, callback));
+export const del = (url: string, cb?: supertest.CallbackHandler) => {
+  return setHeadersToRequest(requestInstance.del(url, cb));
 };

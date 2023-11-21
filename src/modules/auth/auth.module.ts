@@ -12,7 +12,6 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 
 import { AuthController } from './controllers/auth.controller';
 import { CurrentUserController } from './controllers/currentUser.controller';
-import { RegisterController } from './controllers/register.controller';
 
 import { UsersModule } from '../users/users.module';
 
@@ -32,6 +31,6 @@ import { UsersModule } from '../users/users.module';
     }),
   ],
   providers: [AuthService, UsersService, LocalStrategy, JwtStrategy],
-  controllers: [AuthController, CurrentUserController, RegisterController],
+  controllers: [AuthController, CurrentUserController],
 })
 export class AuthModule {}

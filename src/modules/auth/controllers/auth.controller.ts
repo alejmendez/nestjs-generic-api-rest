@@ -1,4 +1,5 @@
 import {
+  Body,
   ClassSerializerInterceptor,
   Controller,
   Post,
@@ -9,10 +10,10 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from '../services/auth.service';
 import { User } from '../../users/entities/user.entity';
+import { RegisterDto } from '../dto/register.dto';
 
 @Controller({
   path: 'auth',
-  version: '1',
 })
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -23,5 +24,10 @@ export class AuthController {
   login(@Request() req) {
     const user = req.user as User;
     return this.authService.generateJWT(user);
+  }
+
+  @Post('register')
+  currentUser(@Body() payload: RegisterDto) {
+    return this.authService.register(payload);
   }
 }

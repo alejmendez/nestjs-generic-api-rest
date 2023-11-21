@@ -1,7 +1,7 @@
 import { startServer, closeServer, get } from '../../helpers';
 
 describe('HealthController (e2e)', () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     await startServer();
   });
 
@@ -9,8 +9,8 @@ describe('HealthController (e2e)', () => {
     await closeServer();
   });
 
-  it('/api/v1/current/user (GET)', () => {
-    return get('/api/v1/current/user').expect(200).expect({
+  it('/api/current/user (GET)', () => {
+    return get('/api/current/user').expect(200).expect({
       status: 'ok',
     });
   });

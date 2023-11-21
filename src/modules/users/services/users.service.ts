@@ -24,7 +24,7 @@ export class UsersService {
     });
   }
 
-  public async findOne(id: string) {
+  public async findOne(id: number) {
     return await this.usersRepository.findOneOrFail({ where: { id } });
   }
 
@@ -60,13 +60,13 @@ export class UsersService {
     return this.usersRepository.save(user);
   }
 
-  public async update(id: string, data: UpdateUserDto) {
+  public async update(id: number, data: UpdateUserDto) {
     const user = await this.usersRepository.findOne({ where: { id } });
     this.usersRepository.merge(user, data);
     return this.usersRepository.save(user);
   }
 
-  public async remove(id: string) {
+  public async remove(id: number) {
     try {
       const user = await this.findOne(id);
       await this.usersRepository.softDelete(id);

@@ -7,8 +7,8 @@ import {
 import { Exclude } from 'class-transformer';
 
 export class AppEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @CreateDateColumn({
     name: 'create_at',
